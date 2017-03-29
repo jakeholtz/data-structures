@@ -8,7 +8,7 @@ var Queue = function() {
   var deleted = 0;
 
   // Implement the methods below
-  debugger;
+  //debugger;
   someInstance.enqueue = function(value) {
     count++;
     totalPassedIn++;
@@ -30,9 +30,3 @@ var Queue = function() {
 
   return someInstance;
 };
-test = new Queue();
-test.enqueue('b');
-test.dequeue();
-test.enqueue('c');
-// var expected = queue.dequeue()).to.equal('b');
-console.log(JSON.stringify(test));
