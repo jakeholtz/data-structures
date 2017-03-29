@@ -23,9 +23,9 @@ stackMethods.push = function(value) {
 }
 
 stackMethods.pop = function() {
-  this.count > 0 ? this.count-- : null;
   var popped = this.storage[this.count];
   delete this.storage[this.count];
+  this.count > 0 ? this.count-- : null;
   return popped;
 }
 
