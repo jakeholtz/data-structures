@@ -16,8 +16,6 @@ var Stack = function() {
 var stackMethods = {};
 
 stackMethods.push = function(value) {
-  // var count = this.count;
-  // var storage = this.storage;
   this.count++;
   this.storage[this.count] = value;
 }
