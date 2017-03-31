@@ -1,39 +1,80 @@
-
-
-// Instantiate a new graph
 var Graph = function() {
+    this.nodes = [];
 };
 
-// Add a node to the graph, passing in the node's value.
-Graph.prototype.addNode = function(node) {
+Graph.prototype.addNode = function(value) {
+	var a = Node(value);
+    this.nodes.push(a);
 };
 
-// Return a boolean value indicating if the value passed to contains is represented in the graph.
 Graph.prototype.contains = function(node) {
+	for (var i = 0; i < this.nodes.length; i++) {
+		if (this.nodes[i].value === node) return true;
+	}
+	return false;
 };
 
-// Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
+	var toBeDeleted;
+	var index;
+	for (var i = 0; i < this.nodes.length; i++) {
+		if (node === this.nodes[i].value) {
+			toBeDeleted = this.nodes[i];
+			index = i;
+		}
+	}
+    for (var j = 0; j < this.nodes[index].edges; j++) {
+    	this.removeEdge(this.nodes[index].edges[j], this.nodes[index].value);
+    }
+	this.nodes.splice(index);
 };
 
-// Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
+	var from;
+	var to;
+	for (var i = 0; i < this.nodes.length; i++) {
+		fromNode === this.nodes[i].value ? from = this.nodes[i] : null;
+		toNode === this.nodes[i].value ? to = this.nodes[i] : null;
+	}
+	return _.contains(from.edges, toNode);
 };
 
-// Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
+	var from;
+	var to;
+	for (var i = 0; i < this.nodes.length; i++) {
+		fromNode === this.nodes[i].value ? from = this.nodes[i] : null;
+		toNode === this.nodes[i].value ? to = this.nodes[i] : null;
+	}
+	from.edges.push(to.value);
+    to.edges.push(from.value);
 };
 
-// Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode) {
+	var from;
+	var to;
+	for (var i = 0; i < this.nodes.length; i++) {
+		fromNode === this.nodes[i].value ? from = this.nodes[i] : null;
+		toNode === this.nodes[i].value ? to = this.nodes[i] : null;
+	}
+	var index = from.edges.indexOf(toNode);
+	to.edges.splice(index);
+	var index2 = to.edges.indexOf(fromNode);
+	from.edges.splice(index2);
 };
 
-// Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+	for (var i = 0; i < this.nodes.length; i++) {
+		cb(this.nodes[i].value);
+	}
 };
 
-/*
- * Complexity: What is the time complexity of the above functions?
- */
+var Node = function(value) {
+  var node = {};
+
+  node.value = value;
+  node.edges = [];
+  return node;
+};
 
 
