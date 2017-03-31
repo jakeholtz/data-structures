@@ -1,4 +1,4 @@
-1
+
 
 var HashTable = function() {
   this._limit = 8;
@@ -9,8 +9,16 @@ HashTable.prototype.insert = function(k, v) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   var tuple = [k, v];
   var bucket = [];
-  bucket.push(tuple);
-  this._storage.set(index, bucket);
+  var oldBucket = this._storage.get(index);
+  if (oldBucket === undefined) {
+    bucket.push(tuple);
+    this._storage.set(index, bucket);
+  } else if (this.retrieve(k) === undefined) {
+    oldBucket.push(tuple);
+  } else {
+  	this.remove(k);
+  	oldBucket.push(tuple);
+  }
 };
 
 HashTable.prototype.retrieve = function(k) {
