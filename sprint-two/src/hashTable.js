@@ -3,6 +3,7 @@
 var HashTable = function() {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
+  this.size = 0;
 };
 
 HashTable.prototype.insert = function(k, v) {
@@ -18,6 +19,10 @@ HashTable.prototype.insert = function(k, v) {
   } else {
   	this.remove(k);
   	oldBucket.push(tuple);
+  }
+  this.size++;
+  if (this.size / this._limit >= 0.75) {
+    this.doubleInSize();
   }
 };
 
@@ -39,7 +44,41 @@ HashTable.prototype.remove = function(k) {
     	bucket.splice(i);
     }
   }
+  this.size--;
+  if (this.size / this._limit <= 0.25 && this._limit > 8) {
+    this.halveInSize();
+  }
 };
+
+HashTable.prototype.doubleInSize = function() {
+  var oldStorage = this._storage;
+  this._limit *= 2;
+  this.size = 0;
+  this._storage = LimitedArray(this._limit);
+  
+  oldStorage.each(function(bucket) {
+    if (bucket !== undefined) {
+      for (var i = 0; i < bucket.length; i++) {
+        this.insert(bucket[i][0], bucket[i][1]);
+      }
+    }
+  }.bind(this));
+}
+
+HashTable.prototype.halveInSize = function() {
+  var oldStorage = this._storage;
+  this._limit /= 2;
+  this.size = 0;
+  this._storage = LimitedArray(this._limit);
+  
+  oldStorage.each(function(bucket) {
+    if (bucket !== undefined) {
+      for (var i = 0; i < bucket.length; i++) {
+        this.insert(bucket[i][0], bucket[i][1]);
+      }
+    }
+  }.bind(this));
+}
 
 
 
